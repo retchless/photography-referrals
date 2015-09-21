@@ -10,7 +10,14 @@ export default class ReferralForm extends React.Component {
           <table>
             <tr>
              <td>Referring photographer</td>
-             <td><input type="text"/></td>
+             <td>
+              <select>
+                <option>Shlomi Amiga</option>
+                <option>Scarlet O'Neill</option>
+                <option>Annuj Yoganathan</option>
+                <option>Erika Hammer</option>
+              </select>
+             </td>
             </tr>
             <tr>
               <td>Client first name:</td>

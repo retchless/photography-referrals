@@ -9,6 +9,7 @@ const app = express();
 app.set('views', './views');  
 app.set('view engine', 'jsx');
 app.engine('jsx', ReactViews.createEngine());
+app.use('/static', express.static(__dirname + "../../../src/server/public"));
 
 app.get("/sendMail", function(req, res) {
   var address = req.query.address;
