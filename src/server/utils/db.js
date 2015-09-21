@@ -5,7 +5,6 @@ var services = process.env.VCAP_SERVICES;
 var conn_str = "";
 if (services) {
   var services = JSON.parse(services);
-  console.log(services);
   if (services['mongolab']) {
     conn_str = services['mongolab'][0]['credentials'].uri;
   } else {
@@ -14,7 +13,6 @@ if (services) {
 } else {
   conn_str = 'mongodb://localhost:27017';
 }
-console.log("using connection string: " + conn_str);
 
 var MongoClient = require('mongodb').MongoClient;
 var db, photographers, referrals;
