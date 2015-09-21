@@ -6,7 +6,7 @@ export default class DefaultLayout extends React.Component {
       <html>
         <head>
           <title>Photographer Referral</title>
-          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
           <link rel="stylesheet" href="/static/style.css"/>
         </head>
         <body>

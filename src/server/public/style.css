@@ -5,11 +5,7 @@ body {
 }
 table td {
 	vertical-align: top;
-	padding-right: 10px;
-}
-table td input {
-	width: 100%;
-	padding: 3px 3px;
+	padding: 10px 10px;
 }
 table {
 	width: 600px;
