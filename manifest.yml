@@ -1,0 +1,6 @@
+---
+applications:
+- name: photography-referrals
+  memory: 512M
+  host: photography-referrals
+  command: node lib/server/server.js

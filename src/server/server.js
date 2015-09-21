@@ -3,7 +3,10 @@ import React from "react";
 import Router from "react-router";
 import ReactViews from "express-react-views";
 import mailer from "./utils/mailer";
+import cfenv from "cfenv";
+
 const app = express();
+var appEnv = cfenv.getAppEnv();
 
 // set up Jade
 app.set('views', './views');  
@@ -37,9 +40,6 @@ app.get('/*', function (req, res) {
   });
 });
 
-var server = app.listen(3000, function () {  
-  var host = server.address().address;
-  var port = server.address().port;
-
-  console.log('Example app listening at http://%s:%s', host, port);
+app.listen(appEnv.port, appEnv.bind, function() {
+    console.log("server starting on " + appEnv.url)
 });
