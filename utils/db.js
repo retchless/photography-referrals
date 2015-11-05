@@ -41,7 +41,6 @@ module.exports.findPhotographers = function(callback) {
   photographers.find({}).toArray(callback);
 }
 
-
 module.exports.recordAvailability = function(answer, callback) {
   if (!db) {
     return callback("attempted to access mongodb, but there is no active connection");
@@ -56,5 +55,12 @@ module.exports.getActiveReferrals = function(callback) {
 
   referrals.find({
     created: { $lt: new Date((new Date()) - 1000*60*60*24) }
-  }, callback)
+  }, callback);
+}
+
+module.exports.insertReferral = function(referral, callback) {
+  if (!db) {
+    return callback("attempted to access mongodb, but there is no active connection");
+  }
+  referrals.insert(referral, callback);
 }

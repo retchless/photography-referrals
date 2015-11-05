@@ -15,6 +15,7 @@ var routes = {
 
 var app = express();
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // set up app
 app.use('/static', express.static(path.join(__dirname, 'public')));
@@ -30,11 +31,12 @@ app.get("/photographers", routes.photographers.get);
 app.put("/photographers", routes.photographers.put);
 
 app.get("/referral", routes.referral.get);
+app.post("/referral", routes.referral.post);
 
 app.get("/availability", routes.availability.get);
 
 app.get("/", function(req, res) {
-  res.send("Check out /submit...");
+  res.send("Check out /referral...");
 });
 
 var server_port = process.env.OPENSHIFT_NODEJS_PORT || 6001;
