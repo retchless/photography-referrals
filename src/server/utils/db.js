@@ -2,15 +2,17 @@ var MongoClient = require('mongodb').MongoClient;
 
 var services = process.env.VCAP_SERVICES;
 
+var host = process.env.OPENSHIFT_MONGODB_DB_HOST;
+var port = process.env.OPENSHIFT_MONGODB_DB_PORT;
+var username = process.env.OPENSHIFT_MONGODB_DB_USERNAME;
+var password = process.env.OPENSHIFT_MONGODB_DB_PASSWORD;
+
 var conn_str = "";
-if (services) {
-  var services = JSON.parse(services);
-  if (services['mongolab']) {
-    conn_str = services['mongolab'][0]['credentials'].uri;
-  } else {
-    conn_str = 'mongodb://localhost:27017';
-  }
+if (host) {
+  console.log("Found OpenShift MongoDB: " + host + ":" + port);
+  conn_str = "mongodb://"+host+":"+port;
 } else {
+  console.log("Default to localhost MongoDB: 127.0.0.1:27017");
   conn_str = 'mongodb://localhost:27017';
 }
 
