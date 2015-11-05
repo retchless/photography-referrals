@@ -6,6 +6,12 @@ var express = require("express"),
     mailer = require("./utils/mailer"),
     db = require("./utils/db");
 
+var routes = {
+      photographers: require("./routes/photographers"),
+      test: require("./routes/test"),
+      referral: require("./routes/referral")
+    };
+
 var app = express();
 app.use(bodyParser.json());
 
@@ -16,65 +22,13 @@ app.engine('dust', cons.dust);
 app.set('view engine', 'dust');
 
 // THESE ARE TEST ROUTES - REAL ROUTES SHOULD BE MOVED OUT OF THE MAIN APP FILE
-app.get("/sendMail", function(req, res) {
-  var address = req.query.address;
-  if (!address) {
-    res.status = 400;
-    res.end("Missing required url parameter: address");
-    return;
-  }
-
-  mailer.sendMail(address, {subject: "Subject line", body: "My mailer is in a module now"}, function(err, callback) {
-    if (err) {
-      res.status = 400;
-      res.end(err.toString());
-      return;
-    }
-    res.end("Mail sent!");
-  })
-});
-
-app.get("/photographers", function(req, res) {
-  db.findPhotographers(function(err, photogs) {
-    if (err) {
-      res.status(400);
-      res.end(err.toString());
-      return;
-    }
-    res.end(JSON.stringify(photogs));
-  });
-})
-
-app.put("/photographers", function(req, res) {
-  console.log(req.body);
-  if (!req.body || !req.body.fname || !req.body.lname || !req.body.email) {
-    res.status(400);
-    res.end("Invalid PUT body - must provide: fname, lname, email");
-    return;
-  }
-  db.insertPhotographer(req.body, function(err, result) {
-    if (err) {
-      res.status(400);
-      res.end(err.toString());
-      return;
-    }
-    res.end("OK");
-  });
-});
+app.get("/sendMail", routes.test.sendMail);
 // END TEST ROUTES
 
-app.get("/submit", function(req, res) {
-  db.findPhotographers(function(err, photogs) {
-    if (err) {
-      res.status(400);
-      res.end(err.toString());
-      return;
-    }
-    res.render("submit", {
-      photographers: photogs
-    })
-  });
-});
+app.get("/photographers", routes.photographers.get);
+app.put("/photographers", routes.photographers.put);
+
+app.get("/referral", routes.referral.get);
 
 app.get("/", function(req, res) {
   res.send("Check out /submit...");
