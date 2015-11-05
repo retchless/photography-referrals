@@ -1,7 +1,5 @@
 var MongoClient = require('mongodb').MongoClient;
 
-var services = process.env.VCAP_SERVICES;
-
 var host = process.env.OPENSHIFT_MONGODB_DB_HOST;
 var port = process.env.OPENSHIFT_MONGODB_DB_PORT;
 var username = process.env.OPENSHIFT_MONGODB_DB_USERNAME;
