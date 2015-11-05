@@ -6,10 +6,9 @@
     <div class="form-group">
       <label for="referring-photog">Referring photographer</label>
       <select class="form-control" id="referring-photog">
-          <option>Shlomi Amiga</option>
-          <option>Scarlet O&#39;Neill</option>
-          <option>Annuj Yoganathan</option>
-          <option>Erika Hammer</option>
+        {#photographers}
+          <option>{fname} {lname}</option>
+        {/photographers}
       </select>
     </div>
     <div class="form-group">

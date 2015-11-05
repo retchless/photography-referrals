@@ -64,7 +64,16 @@ app.put("/photographers", function(req, res) {
 // END TEST ROUTES
 
 app.get("/submit", function(req, res) {
-  res.render("submit");
+  db.findPhotographers(function(err, photogs) {
+    if (err) {
+      res.status(400);
+      res.end(err.toString());
+      return;
+    }
+    res.render("submit", {
+      photographers: photogs
+    })
+  });
 });
 
 app.get("/", function(req, res) {
