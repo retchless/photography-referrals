@@ -9,7 +9,8 @@ var express = require("express"),
 var routes = {
       photographers: require("./routes/photographers"),
       test: require("./routes/test"),
-      referral: require("./routes/referral")
+      referral: require("./routes/referral"),
+      availability: require("./routes/availability")
     };
 
 var app = express();
@@ -29,6 +30,8 @@ app.get("/photographers", routes.photographers.get);
 app.put("/photographers", routes.photographers.put);
 
 app.get("/referral", routes.referral.get);
+
+app.get("/availability", routes.availability.get);
 
 app.get("/", function(req, res) {
   res.send("Check out /submit...");

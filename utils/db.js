@@ -40,3 +40,11 @@ module.exports.findPhotographers = function(callback) {
   }
   photographers.find({}).toArray(callback);
 }
+
+
+module.exports.recordAvailability = function(answer, callback) {
+  if (!db) {
+    return callback("attempted to access mongodb, but there is no active connection");
+  }
+  // do stuff
+}
