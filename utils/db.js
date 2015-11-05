@@ -48,3 +48,13 @@ module.exports.recordAvailability = function(answer, callback) {
   }
   // do stuff
 }
+
+module.exports.getActiveReferrals = function(callback) {
+  if (!db) {
+    return callback("attempted to access mongodb, but there is no active connection");
+  }
+
+  referrals.find({
+    created: { $lt: new Date((new Date()) - 1000*60*60*24) }
+  }, callback)
+}
