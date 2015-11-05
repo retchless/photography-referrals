@@ -1,7 +1,7 @@
 var
   SMTPConnection = require('smtp-connection'),
   async = require("async"),
-  dust = require("dust"),
+  dust = require('dustjs-linkedin'),
   db = require("../utils/db")
 ;
 
