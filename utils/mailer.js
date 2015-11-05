@@ -1,9 +1,23 @@
 var
   SMTPConnection = require('smtp-connection'),
-  async = require("async")
+  async = require("async"),
+  dust = require("dust"),
+  db = require("../utils/db")
 ;
 
 initConnection();
+
+module.exports.sendAskEmail = function(referral, photographer, callback) {
+  dust.render('views/ask', { referral: referral, photographer: photographer }, function(err, out) {
+    console.log(err || out);
+  });
+}
+
+module.exports.sendResultsEmail = function(referral, callback) {
+  dust.render('views/results', { referral: referral }, function(err, out) {
+    console.log(err || out);
+  });
+}
 
 /*
  * to: the recipient's email address
