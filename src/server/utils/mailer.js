@@ -46,10 +46,10 @@ function initConnection() {
 
   function(err, results) {
     if (err) {
-      console.error(err.toString());
-      process.exit(1);
+      console.error("SMTP connection failed: " + err.toString());
+    } else {
+      console.log("SMTP connection established");  
     }
-    console.log("SMTP connection established");
   });
 
 }

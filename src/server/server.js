@@ -5,12 +5,9 @@ import Router from "react-router";
 import ReactViews from "express-react-views";
 import mailer from "./utils/mailer";
 import db from "./utils/db";
-import cfenv from "cfenv";
 
 const app = express();
 app.use(bodyParser.json());
-
-var appEnv = cfenv.getAppEnv();
 
 // set up Jade
 app.set('views', './views');  
@@ -75,8 +72,8 @@ app.get('/*', function (req, res) {
   });
 });
 
-var server_port = process.env.OPENSHIFT_NODEJS_PORT || appEnv.port || 6001;
-var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || appEnv.bind || "127.0.0.1";
+var server_port = process.env.OPENSHIFT_NODEJS_PORT || 6001;
+var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 
 console.log("PORT: " + server_port + ", IP: " + server_ip_address);
  
