@@ -1,8 +1,6 @@
 var db = require("../utils/db");
 
 exports.get = function(req, res) {
-  console.log(req.query);
-  
   var answer = {
     referralId: req.query["referralId"],
     available: req.query["available"],

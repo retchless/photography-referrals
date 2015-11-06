@@ -1,4 +1,5 @@
 var MongoClient = require('mongodb').MongoClient;
+var ObjectID = require('mongodb').ObjectID;
 
 var host = process.env.OPENSHIFT_MONGODB_DB_HOST;
 var port = process.env.OPENSHIFT_MONGODB_DB_PORT;
@@ -45,8 +46,57 @@ module.exports.recordAvailability = function(answer, callback) {
   if (!db) {
     return callback("attempted to access mongodb, but there is no active connection");
   }
-  // do stuff
+
+  // first try just updating the existing response for this photographer
+  referrals.update({
+    _id: ObjectID(answer.referralId),
+    "availability.photographerId": answer.photographerId
+  }, {
+    $set: {
+      "availability.$.available": answer.available
+    }
+  }, function(err, result) {
+    if (err) {
+      return callback(err);
+    }
+
+    // if we modified a record, fetch the referral and respond
+    if (result.nModified > 0) {
+      return getReferralById(answer.referralId, callback);
+    }
+
+    // if we didn't modify a record, the photographer hadn't replied yet, so add a new response
+    referrals.update({
+      _id: ObjectID(answer.referralId)
+    }, {
+      $addToSet: {
+        availability: {
+          photographerId: answer.photographerId,
+          available: answer.available
+        }
+      }
+    }, function(err, result) {
+      if (err) {
+        return callback(err);
+      }
+
+      // we successfully added the new answer, fetch the referral and respond
+      return getReferralById(answer.referralId, callback);
+    })
+  });
 }
+
+function getReferralById (id, callback) {
+  if (!db) {
+    return callback("attempted to access mongodb, but there is no active connection");
+  }
+
+  // it's probably not great to assume success here (e.g. hard code err to null)
+  callback(null, referrals.findOne({
+    _id: ObjectID(id)
+  }));
+}
+module.exports.getReferralById = getReferralById;
 
 module.exports.getActiveReferrals = function(callback) {
   if (!db) {
