@@ -48,7 +48,6 @@ module.exports.recordAvailability = function(answer, callback) {
   if (!db) {
     return callback("attempted to access mongodb, but there is no active connection");
   }
-  console.log(answer);
 
   var asyncTasks = {
     photographer: function(callback) {
@@ -79,7 +78,6 @@ module.exports.recordAvailability = function(answer, callback) {
     }
 
     results.availability = !!JSON.parse(answer.available);
-    console.log(results.availability);
 
     // first try just updating the existing response for this photographer
     referrals.update({
