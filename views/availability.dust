@@ -1,19 +1,25 @@
 <html>
 <head>
-
+<link href="../static/style.css" rel="stylesheet">
 </head>
 <body>
-<h1 style="text-align: center; font-family: Arial; font-size: 21pt">Your availability has been recorded!</h1>
+<div class="availability">
 
-<p style="text-align: center; font-family: Arial; font-size: 14pt">
-{available}<br><br>
+	<h1><div class="thedotlogo"></div>Photgrapher Referral Finder</h1>
 
-for<br><br>
+	{photographer.fname} {photographer.lname}, <br><br>
+	Your availability has been recorded!<br><br>
 
-<b>Name:</b> {referral.client.fname} {referral.client.lname}<br>
-<b>Date:</b> {referral.wedding.date}<br> 
-<b>Location:</b> {referral.wedding.venue} in {referral.wedding.city}
-</p>
+	<div class="answer">{?availability}<div class="available">Available</div>{:else}<div class="not-available">Not Available</div>{/availability}</div><br>
+
+	for the following event:<br><br>
+
+	<b>Name:</b> {referral.client.fname} {referral.client.lname}<br>
+	<b>Date:</b> {referral.wedding.date}<br> 
+	<b>Location:</b> {referral.wedding.venue} in {referral.wedding.city}
+
+	{?availability}<p>Your name and contact information will be sent to this client within the next 24 hours.</p>{/availability}
+</div>
 
 </body>
 </html>

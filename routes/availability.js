@@ -12,10 +12,10 @@ exports.get = function(req, res) {
     return;
   }
 
-  db.recordAvailability(answer, function(err, referral) {
-    res.render("availability", {
-      referral: referral,
-      available: req.query["available"]
-    });
+  db.recordAvailability(answer, function(err, results) {
+    if (err) {
+      res.end(err.toString());
+    }
+    res.render("availability", results);
   });
 }

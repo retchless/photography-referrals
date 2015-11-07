@@ -1,7 +1,28 @@
+@font-face{
+	font-family:'montserratlight';
+	src:url('//www.thedot.photo/wp-content/uploads/pp/fonts/Montserrat-Light-webfont.eot');
+	src:url('//www.thedot.photo/wp-content/uploads/pp/fonts/Montserrat-Light-webfont.eot?#iefix') format('embedded-opentype'),url('//www.thedot.photo/wp-content/uploads/pp/fonts/Montserrat-Light-webfont.woff') format('woff'),url('//www.thedot.photo/wp-content/uploads/pp/fonts/Montserrat-Light-webfont.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal
+}
+@font-face{
+	font-family:'roboto_condensedregular';
+	src:url('http://www.thedot.photo/wp-content/uploads/pp/fonts/RobotoCondensed-Regular-webfont.eot');
+	src:url('http://www.thedot.photo/wp-content/uploads/pp/fonts/RobotoCondensed-Regular-webfont.eot?#iefix') format('embedded-opentype'),url('//www.thedot.photo/wp-content/uploads/pp/fonts/RobotoCondensed-Regular-webfont.woff') format('woff'),url('//www.thedot.photo/wp-content/uploads/pp/fonts/RobotoCondensed-Regular-webfont.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal
+}
+@font-face{
+	font-family:'montserratregular';
+	src:url('http://www.thedot.photo/wp-content/uploads/pp/fonts/Montserrat-Regular-webfont.eot');
+	src:url('http://www.thedot.photo/wp-content/uploads/pp/fonts/Montserrat-Regular-webfont.eot?#iefix') format('embedded-opentype'),url('//www.thedot.photo/wp-content/uploads/pp/fonts/Montserrat-Regular-webfont.woff') format('woff'),url('//www.thedot.photo/wp-content/uploads/pp/fonts/Montserrat-Regular-webfont.ttf') format('truetype');
+	font-weight:normal;
+	font-style:normal
+}
 body {
 	margin: 20px;
 	padding: 0;
-	font-family: Helvetica, Arial;
+	font-family: montserratlight, Helvetica, Arial;
 }
 table td {
 	vertical-align: top;
@@ -9,4 +30,33 @@ table td {
 }
 table {
 	width: 600px;
+}
+.thedotlogo {
+	display: inline-block;
+	height: 121px;
+	width: 120px;
+	background: url('http://www.thedot.photo/wp-content/uploads/pp/images/logo_1423270870.png') no-repeat;
+	margin: 20px 20px 20px 0;
+	vertical-align: middle;
+}
+
+.availability {
+	text-align: center;
+	font-size: 14pt;
+}
+.heading {
+	text-align: center;
+	margin-top: 0;
+}
+h1 {
+	font-size: 21pt;
+}
+.answer {
+	font-weight: bold;
+}
+.available {
+	color: green;
+}
+.not-available {
+	color: red;
 }

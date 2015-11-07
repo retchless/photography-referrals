@@ -1,7 +1,7 @@
 {>layout/}
 {<content}
 <div class='app container'>
-	<h3>Refer to another Wedding Photographer</h3>
+  <h1 class="heading"><div class="thedotlogo"></div>Photgrapher Referral Finder</h1>
   <form action="/referral" method="POST">
     <div class="form-group">
       <label for="referring-photographer">Referring photographer</label>

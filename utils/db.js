@@ -1,6 +1,8 @@
 var MongoClient = require('mongodb').MongoClient;
 var ObjectID = require('mongodb').ObjectID;
 
+var async = require("async");
+
 var host = process.env.OPENSHIFT_MONGODB_DB_HOST;
 var port = process.env.OPENSHIFT_MONGODB_DB_PORT;
 var username = process.env.OPENSHIFT_MONGODB_DB_USERNAME;
@@ -46,43 +48,77 @@ module.exports.recordAvailability = function(answer, callback) {
   if (!db) {
     return callback("attempted to access mongodb, but there is no active connection");
   }
+  console.log(answer);
 
-  // first try just updating the existing response for this photographer
-  referrals.update({
-    _id: ObjectID(answer.referralId),
-    "availability.photographerId": answer.photographerId
-  }, {
-    $set: {
-      "availability.$.available": answer.available
-    }
-  }, function(err, result) {
-    if (err) {
-      return callback(err);
-    }
-
-    // if we modified a record, fetch the referral and respond
-    if (result.nModified > 0) {
-      return getReferralById(answer.referralId, callback);
-    }
-
-    // if we didn't modify a record, the photographer hadn't replied yet, so add a new response
-    referrals.update({
-      _id: ObjectID(answer.referralId)
-    }, {
-      $addToSet: {
-        availability: {
-          photographerId: answer.photographerId,
-          available: answer.available
+  var asyncTasks = {
+    photographer: function(callback) {
+      getPhotographerById(answer.photographerId, function(err, photog) {
+        if (!photog || photog.length == 0) {
+          callback("error: Invalid Photographer ID");
+          return;
         }
+        console.log("valid photographer: " + photog._id);
+        callback(null, photog);
+      });
+    },
+    referral: function(callback) {
+      getReferralById(answer.referralId, function(err, ref) {
+        if (!ref || ref.length == 0) {
+          callback("error: Invalid Referral ID");
+          return;
+        }
+        console.log("valid referral: " + ref._id);
+        callback(null, ref);
+      });
+    }
+  }
+
+  async.parallel(asyncTasks, function(err, results) {
+    if (err) {
+        callback(err);
+    }
+
+    results.availability = !!JSON.parse(answer.available);
+    console.log(results.availability);
+
+    // first try just updating the existing response for this photographer
+    referrals.update({
+      _id: ObjectID(answer.referralId),
+      "availability.photographerId": answer.photographerId
+    }, {
+      $set: {
+        "availability.$.available": results.availability
       }
     }, function(err, result) {
       if (err) {
+        console.log("error: " + err.toString());
         return callback(err);
       }
 
-      // we successfully added the new answer, fetch the referral and respond
-      return getReferralById(answer.referralId, callback);
-    })
+      // if we modified a record, fetch the referral and respond
+      if (result.nModified > 0) {
+        return callback(null, results);
+      }
+
+      // if we didn't modify a record, the photographer hadn't replied yet, so add a new response
+      referrals.update({
+        _id: ObjectID(answer.referralId)
+      }, {
+        $addToSet: {
+          availability: {
+            photographerId: answer.photographerId,
+            available: results.availability
+          }
+        }
+      }, function(err, result) {
+        if (err) {
+          return callback(err);
+        }
+
+        // we successfully added the new answer, fetch the referral and respond
+        return callback(null, results);
+      });
+    });
   });
 }
 
@@ -91,12 +127,32 @@ function getReferralById (id, callback) {
     return callback("attempted to access mongodb, but there is no active connection");
   }
 
-  // it's probably not great to assume success here (e.g. hard code err to null)
-  callback(null, referrals.findOne({
-    _id: ObjectID(id)
-  }));
+  var id;
+  try {
+    id = ObjectID(id);
+  } catch (err) {
+    return callback("Invalid referral ID");
+  }
+ 
+  referrals.findOne({ _id: id}, callback);
 }
 module.exports.getReferralById = getReferralById;
+
+function getPhotographerById (id, callback) {
+  if (!db) {
+    return callback("attempted to access mongodb, but there is no active connection");
+  }
+
+  var id;
+  try {
+    id = ObjectID(id);
+  } catch (err) {
+    return callback("Invalid photographer ID");
+  }
+
+  photographers.findOne({ _id: id}, callback);
+}
+module.exports.getPhotographerById = getPhotographerById;
 
 module.exports.getActiveReferrals = function(callback) {
   if (!db) {
