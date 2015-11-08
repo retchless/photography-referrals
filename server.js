@@ -4,7 +4,8 @@ var express = require("express"),
     cons = require("consolidate"),
     dust = require("dustjs-linkedin"),
     mailer = require("./utils/mailer"),
-    db = require("./utils/db");
+    db = require("./utils/db"),
+    CronJob = require('cron').CronJob;
 
 var routes = {
       photographers: require("./routes/photographers"),
@@ -47,3 +48,20 @@ console.log("PORT: " + server_port + ", IP: " + server_ip_address);
 app.listen(server_port, server_ip_address, function () {
   console.log( "Listening on " + server_ip_address + ", server_port " + server_port )
 });
+
+var job = new CronJob('*/30 * * * * *', 
+  /* on tick */ function(){
+    db.getCompletedReferrals(function(err, referrals) {
+      for (var i = 0; i < referrals.length; i++) {
+        //mailer.sendResultsEmail(referrals[i]);
+        db.markCompleted(referrals[i], function() {
+          console.log("Referral " + referrals[i]._id + " marked completed.");
+        });
+      }
+    })
+  }, 
+  /* on stop */ function () {
+    // This function is executed when the job stops
+  },
+  true /* Start the job right now */
+);

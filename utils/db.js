@@ -152,19 +152,45 @@ function getPhotographerById (id, callback) {
 }
 module.exports.getPhotographerById = getPhotographerById;
 
-module.exports.getActiveReferrals = function(callback) {
+module.exports.getCompletedReferrals = function(callback) {
   if (!db) {
     return callback("attempted to access mongodb, but there is no active connection");
   }
 
-  referrals.find({
-    created: { $lt: new Date((new Date()) - 1000*60*60*24) }
-  }, callback);
+  referrals.find({ completed: false, requestDate: { $lt: new Date((new Date()) - 1000*60*60*24) } }).toArray(callback);
 }
 
 module.exports.insertReferral = function(referral, callback) {
   if (!db) {
     return callback("attempted to access mongodb, but there is no active connection");
   }
+  
   referrals.insert(referral, callback);
+}
+
+module.exports.markCompleted = function(referral, callback) {
+  if (!db) {
+    return callback("attempted to access mongodb, but there is no active connection");
+  }
+
+  // first try just updating the existing response for this photographer
+  referrals.update({
+    _id: ObjectID(referral._id)
+  }, {
+    $set: {
+      "completed": true
+    }
+  }, function(err, result) {
+    if (err) {
+      console.log("error: " + err.toString());
+      return callback(err);
+    }
+
+    // if we modified a record, fetch the referral and respond
+    if (result.nModified > 0) {
+      return callback();
+    } else {
+      return callback("Couldn't mark record as completed");
+    }
+  });
 }

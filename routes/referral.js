@@ -1,12 +1,15 @@
-var db = require("../utils/db");
+var db = require("../utils/db"),
+    mailer = require("../utils/mailer");
 
+var photographers;
 exports.get = function(req, res) {
-  db.findPhotographers(function(err, photogs) {
+  db.getPhotographers(function(err, photogs) {
     if (err) {
       res.status(400);
       res.end(err.toString());
       return;
     }
+    photographers = photogs;
     res.render("submit", {
       photographers: photogs
     })
@@ -62,7 +65,9 @@ exports.post = function(req, res) {
       city: req.body.weddingCity,
       venue: req.body.weddingVenue
     },
-    notes: req.body.notes || ""
+    notes: req.body.notes || "",
+    requestDate: new Date(),
+    completed: false
   };
   console.log(referral);
 
@@ -72,6 +77,7 @@ exports.post = function(req, res) {
       res.end(err.toString());
       return;
     }
+    //mailer.sendAskEmail(referral);
     res.end("Referral created successfully!");
   });
 }

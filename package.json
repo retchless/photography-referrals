@@ -13,6 +13,7 @@
     "body-parser": "^1.14.0",
     "bootstrap": "^3.3.5",
     "consolidate": "^0.13.1",
+    "cron": "^1.0.9",
     "dustjs-linkedin": "^2.7.2",
     "express": "^4.13.3",
     "mongodb": "^2.0.43",

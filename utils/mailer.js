@@ -5,8 +5,6 @@ var
   db = require("../utils/db")
 ;
 
-initConnection();
-
 module.exports.sendAskEmail = function(referral, photographer, callback) {
   dust.render('views/ask', { referral: referral, photographer: photographer }, function(err, out) {
     console.log(err || out);
@@ -25,6 +23,7 @@ module.exports.sendResultsEmail = function(referral, callback) {
  * content.body: the body of the email to be sent
  */
 module.exports.sendMail = function(to, content, callback) {
+  initConnection();
 
   var message = content.subject ? "Subject: " + content.subject + "\n": "";
   message += content.body;
@@ -34,7 +33,10 @@ module.exports.sendMail = function(to, content, callback) {
       to: to
     },
     message,
-    callback
+    function(err, info) {
+      closeConnection();
+      callback(err, info);
+    }
   );
 
 };
@@ -66,4 +68,8 @@ function initConnection() {
     }
   });
 
+}
+
+function closeConnection() {
+  connection.quit();
 }
