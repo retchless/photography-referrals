@@ -15,8 +15,10 @@
     "consolidate": "^0.13.1",
     "cron": "^1.0.9",
     "dustjs-linkedin": "^2.7.2",
+    "email-templates": "^2.0.1",
     "express": "^4.13.3",
     "mongodb": "^2.0.43",
+    "nodemailer": "^1.8.0",
     "nodemon": "^1.3.7",
     "smtp-connection": "^1.3.1"
   }

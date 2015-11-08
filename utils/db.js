@@ -37,7 +37,7 @@ module.exports.insertPhotographer = function(photographer, callback) {
   photographers.insert(photographer, callback);
 }
 
-module.exports.findPhotographers = function(callback) {
+module.exports.getPhotographers = function(callback) {
   if (!db) {
     return callback("attempted to access mongodb, but there is no active connection");
   }

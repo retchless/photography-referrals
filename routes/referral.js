@@ -1,7 +1,6 @@
 var db = require("../utils/db"),
     mailer = require("../utils/mailer");
 
-var photographers;
 exports.get = function(req, res) {
   db.getPhotographers(function(err, photogs) {
     if (err) {
@@ -9,7 +8,6 @@ exports.get = function(req, res) {
       res.end(err.toString());
       return;
     }
-    photographers = photogs;
     res.render("submit", {
       photographers: photogs
     })
@@ -69,7 +67,8 @@ exports.post = function(req, res) {
     requestDate: new Date(),
     completed: false
   };
-  console.log(referral);
+
+  console.log("New referral submitted: " + JSON.stringify(referral));
 
   db.insertReferral(referral, function(err, result) {
     if (err) {
@@ -77,7 +76,15 @@ exports.post = function(req, res) {
       res.end(err.toString());
       return;
     }
-    //mailer.sendAskEmail(referral);
-    res.end("Referral created successfully!");
+    db.getPhotographers(function(err, photogs) {
+      if (err) {
+        res.status(400);
+        res.end(err.toString());
+        return;
+      }
+      mailer.sendAskEmail(referral, photogs, function() {
+        res.render("submitted");
+      });
+    });
   });
 }

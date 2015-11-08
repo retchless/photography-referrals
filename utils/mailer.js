@@ -1,14 +1,41 @@
 var
-  SMTPConnection = require('smtp-connection'),
+  nodemailer = require('nodemailer'),
   async = require("async"),
   dust = require('dustjs-linkedin'),
-  db = require("../utils/db")
+  db = require("../utils/db"),
+  EmailTemplate = require('email-templates').EmailTemplate,
+  path = require('path')
 ;
 
-module.exports.sendAskEmail = function(referral, photographer, callback) {
-  dust.render('views/ask', { referral: referral, photographer: photographer }, function(err, out) {
-    console.log(err || out);
-  });
+// create reusable transporter object using SMTP transport
+var transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+        user: 'thedotreferral@gmail.com',
+        pass: 'retchless'
+    }
+});
+
+module.exports.sendAskEmail = function(referral, photogs, callback) {
+  var templateDir = path.join(__dirname, "../", 'templates', 'ask')
+   
+  var askEmail = new EmailTemplate(templateDir);
+   
+  async.each(photogs, function (photog, next) {
+    askEmail.render({photographer: photog, referral: referral, domain: process.env.OPENSHIFT_APP_DNS||"localhost:6001"}, function (err, results) {
+      if (err) {
+        console.log(err);
+        return next(err);
+      }
+      sendMail(photog.email, {subject: "Incoming Referral from The Dot", body: results.html}, function(err, info) {
+        next();
+      });
+      // result.html 
+      // result.text 
+    })
+  }, function (err) {
+    callback();
+  })
 }
 
 module.exports.sendResultsEmail = function(referral, callback) {
@@ -22,53 +49,26 @@ module.exports.sendResultsEmail = function(referral, callback) {
  * content.subject: the subject of the email to be sent
  * content.body: the body of the email to be sent
  */
-module.exports.sendMail = function(to, content, callback) {
-  initConnection();
+var sendMail = function(to, content, callback) {
+  // setup e-mail data with unicode symbols
+  var mailOptions = {
+      from: 'The Dot Referral Service <thedotreferral@gmail.com>', // sender address
+      to: to,
+      subject: content.subject, // Subject line
+      html: content.body // html body
+  };
 
-  var message = content.subject ? "Subject: " + content.subject + "\n": "";
-  message += content.body;
-  connection.send(
-    {
-      from: "thedotreferral@gmail.com",
-      to: to
-    },
-    message,
-    function(err, info) {
-      closeConnection();
-      callback(err, info);
-    }
-  );
-
+  // send mail with defined transport object
+  transporter.sendMail(mailOptions, function(error, info){
+      if(error){
+        console.log(error);
+        return callback(error);
+      }
+      console.log('Message sent to '+ to + ": " + info.response);
+      callback(null, info);
+  });
 };
-
-var connection;
-function initConnection() {
-
-  connection = new SMTPConnection({
-    port: 465,
-    host: "smtp.gmail.com",
-    secure: true
-  });
-
-  async.series([
-    connection.connect.bind(connection),
-    function(callback) {
-      connection.login({
-        user: "thedotreferral",
-        pass: "retchless"
-      }, callback);
-    }
-  ],
-
-  function(err, results) {
-    if (err) {
-      console.error("SMTP connection failed: " + err.toString());
-    } else {
-      console.log("SMTP connection established");  
-    }
-  });
-
-}
+module.exports.sendMail = sendMail;
 
 function closeConnection() {
   connection.quit();
