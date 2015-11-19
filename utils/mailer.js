@@ -48,10 +48,10 @@ module.exports.sendResultsEmail = function(referral, photographers, callback) {
     for (var i = 0; i < availPhotogs.length; i++) {
 
     }
-    subject = "The.Dot: Available photographers on your wedding date!"
+    subject = "The.Dot: Available photographers on your wedding date!";
   } else {
     console.log("No photographers available for referral " + referral._id);
-    subject = "";
+    subject = "The.Dot: No photographers found for your wedding date";
   }
 
   var templateDir = path.join(__dirname, "../", 'templates', availPhotogs ? 'results' : 'results_none');  
@@ -65,8 +65,10 @@ module.exports.sendResultsEmail = function(referral, photographers, callback) {
     sendMail(referral.client.email, {subject: subject, body: results.html}, function(err, info) {
       if (err) {
         console.log("Error sending mail.");
-        console.log(err);  
+        console.log(err);
+        callback(err);  
       }
+      callback();
     });
     // result.html 
     // result.text 

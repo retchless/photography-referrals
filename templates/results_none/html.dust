@@ -24,7 +24,7 @@
 								</tr>
 								<tr>
 									<td class="content-block">
-										Hello {client.fname} {client.lname},
+										Hello {referral.client.fname} {referral.client.lname},
 									</td>
 								</tr>
 								<tr>
