@@ -45,14 +45,24 @@ module.exports.sendResultsEmail = function(referral, photographers, callback) {
 
   if (availPhotogs) {
     console.log(availPhotogs.length + " available photographers for referral " + referral._id + ":");
+<<<<<<< Updated upstream
+    console.log(availPhotogs);
+    for (var i = 0; i < availPhotogs.length; i++) {
+      availPhotogs[i].fname = "Adam";
+      availPhotogs[i].lname = "Archer";
+      availPhotogs[i].email = "agarcher@gmail.com"
+      availPhotogs[i].profileUrl = "http://www.thedot.photo/adam-archer/"
+=======
+    console.log(availPhotogs); 
+
     outer: for (var i = 0; i < availPhotogs.length; i++) {
-      inner: for (var j = 0; j < photographers.length; j++) {
-        if (photographers[j]._id.toString() == availPhotogs[i].photographerId.toString()) {
-          console.log("MATCH " + photographers[j]._id);
-          availPhotogs[i] = photographers[j];
-          break inner;
-        }
-      }
+       inner: for (var j = 0; j < photographers.length; j++) {
+          if (photographers[j]._id == availPhotogs[i].photographerId) {
+            availPhotogs[i] = photographers[j];
+            break inner;
+          }
+       }
+>>>>>>> Stashed changes
     }
 
     console.log("translated availPhotogs:")

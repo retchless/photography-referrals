@@ -16,6 +16,10 @@ exports.get = function(req, res) {
     if (err) {
       res.end(err.toString());
     }
+    if (!results || !results.photographer) {
+      res.end("Invalid parameters - availability not recorded.");
+      return;
+    }
     console.log("Photographer " + results.photographer.fname + " " + results.photographer.lname + " availability marked as " + results.availability + " for event id " + results.referral._id)
     res.render("availability", results);
   });

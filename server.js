@@ -73,6 +73,11 @@ var job = new CronJob('*/5 * * * * *',
         if (referrals.length > 0) {
           console.log("Completed referrals: " + referrals);
           db.getPhotographers(function(err, photographers)  {
+            if (err) {
+              console.log("Error getting list of Photographers from DB");
+              console.log(err);
+              return err;
+            }
             for (var i = 0; i < referrals.length; i++) {
               var referral = referrals[i];
               var referralId = referral._id;
