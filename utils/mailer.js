@@ -35,13 +35,44 @@ module.exports.sendAskEmail = function(referral, photogs, callback) {
     })
   }, function (err) {
     callback();
-  })
+  });
 }
 
-module.exports.sendResultsEmail = function(referral, callback) {
-  dust.render('views/results', { referral: referral }, function(err, out) {
-    console.log(err || out);
-  });
+module.exports.sendResultsEmail = function(referral, photographers, callback) {
+
+  var availPhotogs = referral.availability;
+  var subject = "";
+  if (availPhotogs) {
+    console.log(availPhotogs.length + " available photographers for referral " + referral._id + ":");
+    console.log(availPhotogs); 
+    for (var i = 0; i < availPhotogs.length; i++) {
+
+    }
+    subject = "The.Dot: Available photographers on your wedding date!"
+  } else {
+    console.log("No photographers available for referral " + referral._id);
+    subject = "";
+  }
+
+  var templateDir = path.join(__dirname, "../", 'templates', availPhotogs ? 'results' : 'results_none');  
+  var resultsEmail = new EmailTemplate(templateDir);
+  resultsEmail.render({availPhotogs: availPhotogs, referral: referral, domain: process.env.OPENSHIFT_APP_DNS||"localhost:6001"}, function (err, results) {
+    if (err) {
+      console.log("Error rendering template.");
+      console.log(err);
+    }
+
+    sendMail(referral.client.email, {subject: subject, body: results.html}, function(err, info) {
+      if (err) {
+        console.log("Error sending mail.");
+        console.log(err);  
+      }
+    });
+    // result.html 
+    // result.text 
+  }, function (err) {
+    callback(err);
+  })
 }
 
 /*
@@ -61,6 +92,7 @@ var sendMail = function(to, content, callback) {
   // send mail with defined transport object
   transporter.sendMail(mailOptions, function(error, info){
       if(error){
+        console.log("Error sending email to: " + to);
         console.log(error);
         return callback(error);
       }

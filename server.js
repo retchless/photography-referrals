@@ -48,15 +48,46 @@ app.listen(server_port, server_ip_address, function () {
   console.log( "Listening on " + server_ip_address + ", server_port " + server_port )
 });
 
-var job = new CronJob('*/30 * * * * *', 
+var job = new CronJob('*/5 * * * * *', 
   /* on tick */ function(){
+    console.log("start cron job");
+
     db.getCompletedReferrals(function(err, referrals) {
-      for (var i = 0; i < referrals.length; i++) {
-        //mailer.sendResultsEmail(referrals[i]);
-        db.markCompleted(referrals[i], function() {
-          console.log("Referral " + referrals[i]._id + " marked completed.");
-        });
-      }
+      if (err) {
+        console.log("error:");
+        console.log(err);
+      } else {
+        if (referrals.length > 0) {
+          console.log("Completed referrals: " + referrals);
+          db.getPhotographers(function(err, photographers)  {
+            for (var i = 0; i < referrals.length; i++) {
+              var referral = referrals[i];
+              var referralId = referral._id;
+              
+              console.log("Send results email to referral: " + referralId);
+              console.log(referral);
+
+              mailer.sendResultsEmail(referral, photographers, function(err) {
+                if (err) {
+                  console.log("Error sending email to referral: " + referralId);
+                  console.log(err);
+                } else {
+                  console.log("Results email sent.");
+      
+                  console.log("Marking as completed in db.");
+                  db.markCompleted(referral, function() {
+                    console.log("Referral " + referralId + " marked completed.");
+                  });
+                }
+              });
+            }
+          });
+        } else {
+          console.log("No referrals marked for completion");
+        }  
+      } 
+      
+      console.log("end cron job");
     })
   }, 
   /* on stop */ function () {
