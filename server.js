@@ -5,7 +5,8 @@ var express = require("express"),
     dust = require("dustjs-linkedin"),
     mailer = require("./utils/mailer"),
     db = require("./utils/db"),
-    CronJob = require('cron').CronJob;
+    CronJob = require('cron').CronJob,
+    auth = require('http-auth');
 
 var routes = {
       photographers: require("./routes/photographers"),
@@ -14,7 +15,15 @@ var routes = {
       availability: require("./routes/availability")
     };
 
+// Authentication module.;
+var basic = auth.basic({
+    realm: "TheDotReferral.",
+    file: __dirname + "/users.htpasswd" // gevorg:gpass, Sarah:testpass ...
+});
+
 var app = express();
+app.use(auth.connect(basic));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -33,7 +42,11 @@ app.post("/referral", routes.referral.post);
 app.get("/availability", routes.availability.get);
 
 app.get("/", function(req, res) {
-  res.send("Check out /referral...");
+  res.status(302);
+  res.set({
+    location: "/referral"
+  });
+  res.end();
 });
 var server_port = process.env.OPENSHIFT_NODEJS_PORT || 6001;
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
