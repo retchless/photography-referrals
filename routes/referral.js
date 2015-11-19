@@ -45,11 +45,6 @@ exports.post = function(req, res) {
     res.end("Invalid referral. Wedding city is required.");
     return;
   }
-  if (!req.body.weddingVenue) {
-    res.status(400);
-    res.end("Invalid referral. Wedding venue is required.");
-    return;
-  }
 
   var referral = {
     referrer: req.body.referrer,
@@ -61,7 +56,7 @@ exports.post = function(req, res) {
     wedding: {
       date: req.body.weddingDate,
       city: req.body.weddingCity,
-      venue: req.body.weddingVenue
+      venue: req.body.weddingVenue || ""
     },
     notes: req.body.notes || "",
     requestDate: new Date(),
@@ -82,7 +77,17 @@ exports.post = function(req, res) {
         res.end(err.toString());
         return;
       }
-      mailer.sendAskEmail(referral, photogs, function() {
+
+      // remove the contributing photographer from the email list
+      var referrer, recipients = [];
+      for (var i in photogs) {
+        if (photogs[i]._id == req.body.referrer) {
+          referrer = photogs[i];
+        } else {
+          recipients.push(photogs[i]);
+        }
+      }
+      mailer.sendAskEmail(referral, referrer, recipients, function() {
         res.render("submitted");
       });
     });
