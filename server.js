@@ -22,24 +22,28 @@ var basic = auth.basic({
 });
 
 var app = express();
-app.use(auth.connect(basic));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// set up app
-app.use('/static', express.static(path.join(__dirname, 'public')));
-app.set('views', path.join(__dirname, 'views'));
 app.engine('dust', cons.dust);
 app.set('view engine', 'dust');
+app.set('views', path.join(__dirname, 'views'));
+
+// leave /availability open so you don't have to auth to respond
+app.get("/availability", routes.availability.get);
+
+// setup auth
+app.use(auth.connect(basic));
+
+// set up app routes
+app.use('/static', express.static(path.join(__dirname, 'public')));
 
 app.get("/photographers", routes.photographers.get);
 app.put("/photographers", routes.photographers.put);
 
 app.get("/referral", routes.referral.get);
 app.post("/referral", routes.referral.post);
-
-app.get("/availability", routes.availability.get);
 
 app.get("/", function(req, res) {
   res.status(302);
