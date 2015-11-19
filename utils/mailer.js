@@ -44,9 +44,12 @@ module.exports.sendResultsEmail = function(referral, photographers, callback) {
   var subject = "";
   if (availPhotogs) {
     console.log(availPhotogs.length + " available photographers for referral " + referral._id + ":");
-    console.log(availPhotogs); 
+    console.log(availPhotogs);
     for (var i = 0; i < availPhotogs.length; i++) {
-
+      availPhotogs[i].fname = "Adam";
+      availPhotogs[i].lname = "Archer";
+      availPhotogs[i].email = "agarcher@gmail.com"
+      availPhotogs[i].profileUrl = "http://www.thedot.photo/adam-archer/"
     }
     subject = "The.Dot: Available photographers on your wedding date!";
   } else {
@@ -54,7 +57,7 @@ module.exports.sendResultsEmail = function(referral, photographers, callback) {
     subject = "The.Dot: No photographers found for your wedding date";
   }
 
-  var templateDir = path.join(__dirname, "../", 'templates', availPhotogs ? 'results' : 'results_none');  
+  var templateDir = path.join(__dirname, "../", 'templates', availPhotogs ? 'results' : 'results_none');
   var resultsEmail = new EmailTemplate(templateDir);
   resultsEmail.render({availPhotogs: availPhotogs, referral: referral, domain: process.env.OPENSHIFT_APP_DNS||"localhost:6001"}, function (err, results) {
     if (err) {
@@ -66,12 +69,12 @@ module.exports.sendResultsEmail = function(referral, photographers, callback) {
       if (err) {
         console.log("Error sending mail.");
         console.log(err);
-        callback(err);  
+        callback(err);
       }
       callback();
     });
-    // result.html 
-    // result.text 
+    // result.html
+    // result.text
   }, function (err) {
     callback(err);
   })

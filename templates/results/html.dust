@@ -24,18 +24,19 @@
 								</tr>
 								<tr>
 									<td class="content-block">
-										Hello {photographer.fname} {photographer.lname},
+										Hello {referral.client.fname} {referral.client.lname},
 									</td>
 								</tr>
 								<tr>
 									<td class="content-block">
-										<b>{referral.client.fname} {referral.client.lname}</b> is looking for a wedding photographer on <b>{referral.wedding.date}</b> in <b>{referral.wedding.city}</b> at <b>{referral.wedding.venue}</b></p>
+										Thank you so much for allowing The.Dot to find you the best photographer available for your wedding day.  The following photographers are available!
 									</td>
 								</tr>
 								<tr>
-									<td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
-										<a href="http://{domain}/availability?referralId={referral._id}&photographerId={photographer._id}&available=true" class="btn-primary" itemprop="url">Available</a>&nbsp;
-										<a href="http://{domain}/availability?referralId={referral._id}&photographerId={photographer._id}&available=false" class="btn-primary red" itemprop="url">Not Available</a>
+									<td class="content-block">
+										{#availPhotogs}
+											<a href="{profileUrl}">{fname} {lname}</a>&nbsp;&nbsp;<a href="mailto:{email}">{email}</a>
+										{/availPhotogs}
 									</td>
 								</tr>
 							</table>
