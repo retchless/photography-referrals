@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="viewport" content="width=device-width" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Incoming Referral from The Dot</title>
+</head>
+
+<body itemscope itemtype="http://schema.org/EmailMessage">
+
+<table class="body-wrap">
+	<tr>
+		<td></td>
+		<td class="container" width="600">
+			<div class="content">
+				<table class="main" width="100%" cellpadding="0" cellspacing="0">
+					<tr>
+						<td class="content-wrap">
+							<table width="100%" cellpadding="0" cellspacing="0">
+								<tr>
+									<td class="content-block">
+										<div class="thedotlogo"></div><span class="headertext">Photography Referral Finder</span>
+									</td>
+								</tr>
+								<tr>
+									<td class="content-block">
+										Hello {photographer.fname} {photographer.lname},
+									</td>
+								</tr>
+								<tr>
+									<td class="content-block">
+										<b>{referral.client.fname} {referral.client.lname}</b> is looking for a wedding photographer on <b>{referral.wedding.date}</b> in <b>{referral.wedding.city}</b> at <b>{referral.wedding.venue}</b></p>
+									</td>
+								</tr>
+								<tr>
+									<td class="content-block" itemprop="handler" itemscope itemtype="http://schema.org/HttpActionHandler">
+										<a href="http://{domain}/availability?referralId={referral._id}&photographerId={photographer._id}&available=true" class="btn-primary" itemprop="url">Available</a>&nbsp;
+										<a href="http://{domain}/availability?referralId={referral._id}&photographerId={photographer._id}&available=false" class="btn-primary red" itemprop="url">Not Available</a>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+				<div class="footer">
+					<table width="100%">
+						<tr>
+							<td class="aligncenter content-block">Brought to you by <a href="http://www.thedot.photo">The Dot</a>.</td>
+						</tr>
+					</table>
+				</div></div>
+		</td>
+		<td></td>
+	</tr>
+</table>
+
+</body>
+</html>
