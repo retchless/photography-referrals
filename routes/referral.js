@@ -82,6 +82,12 @@ exports.post = function(req, res) {
         res.end(err.toString());
         return;
       }
+
+      // remove the contributing photographer from the email list
+      photogs = photogs.filter(function(photog) {
+        return photog._id != req.body.referrer;
+      });
+
       mailer.sendAskEmail(referral, photogs, function() {
         res.render("submitted");
       });

@@ -24,10 +24,6 @@ app.set('views', path.join(__dirname, 'views'));
 app.engine('dust', cons.dust);
 app.set('view engine', 'dust');
 
-// THESE ARE TEST ROUTES - REAL ROUTES SHOULD BE MOVED OUT OF THE MAIN APP FILE
-app.get("/sendMail", routes.test.sendMail);
-// END TEST ROUTES
-
 app.get("/photographers", routes.photographers.get);
 app.put("/photographers", routes.photographers.put);
 
@@ -43,12 +39,12 @@ var server_port = process.env.OPENSHIFT_NODEJS_PORT || 6001;
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
 
 console.log("PORT: " + server_port + ", IP: " + server_ip_address);
- 
+
 app.listen(server_port, server_ip_address, function () {
   console.log( "Listening on " + server_ip_address + ", server_port " + server_port )
 });
 
-var job = new CronJob('*/30 * * * * *', 
+var job = new CronJob('*/30 * * * * *',
   /* on tick */ function(){
     db.getCompletedReferrals(function(err, referrals) {
       for (var i = 0; i < referrals.length; i++) {
@@ -58,7 +54,7 @@ var job = new CronJob('*/30 * * * * *',
         });
       }
     })
-  }, 
+  },
   /* on stop */ function () {
     // This function is executed when the job stops
   },
