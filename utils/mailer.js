@@ -49,7 +49,9 @@ module.exports.sendResultsEmail = function(referral, photographers, callback) {
       inner: for (var j = 0; j < photographers.length; j++) {
         if (photographers[j]._id.toString() == availPhotogs[i].photographerId.toString()) {
           console.log("MATCH " + photographers[j]._id);
-          availPhotogs[i] = photographers[j];
+          var photog = photographers[j];
+          availPhotogs[i] = photog;
+          availPhotogs[i].profileUrl = "http://www.thedot.photo/" + photog.fname.toLowerCase().replace(" ", "-") + "-"+ photog.lname.toLowerCase().replace(" ", "-");
           break inner;
         }
       }

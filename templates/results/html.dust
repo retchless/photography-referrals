@@ -32,13 +32,13 @@
 										Thank you so much for allowing The.Dot to find you the best photographer available for your wedding day.  The following photographers are available!
 									</td>
 								</tr>
+								{#availPhotogs}
 								<tr>
-									<td class="content-block">
-										{#availPhotogs}
-											<a href="{profileUrl}">{fname} {lname}</a>&nbsp;&nbsp;<a href="mailto:{email}">{email}</a>
-										{/availPhotogs}
+									<td class="content-block avail-photogs">
+											<a href="{profileUrl}">{fname} {lname}</a>
 									</td>
 								</tr>
+								{/availPhotogs}
 							</table>
 						</td>
 					</tr>

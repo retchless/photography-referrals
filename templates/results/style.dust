@@ -1,4 +1,4 @@
-/* -------------------------------------
+style.dust/* -------------------------------------
     GLOBAL
     A very basic CSS reset
 ------------------------------------- */
@@ -26,6 +26,10 @@ body {
 /* Let's make sure all tables have defaults */
 table td {
   vertical-align: top;
+}
+
+.avail-photogs {
+  font-size: 14pt;
 }
 
 /* -------------------------------------
