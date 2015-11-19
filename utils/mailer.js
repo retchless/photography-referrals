@@ -16,13 +16,13 @@ var transporter = nodemailer.createTransport({
     }
 });
 
-module.exports.sendAskEmail = function(referral, photogs, callback) {
+module.exports.sendAskEmail = function(referral, referrer, photogs, callback) {
   var templateDir = path.join(__dirname, "../", 'templates', 'ask')
-   
+
   var askEmail = new EmailTemplate(templateDir);
-   
+
   async.each(photogs, function (photog, next) {
-    askEmail.render({photographer: photog, referral: referral, domain: process.env.OPENSHIFT_APP_DNS||"localhost:6001"}, function (err, results) {
+    askEmail.render({photographer: photog, referral: referral, referrer: referrer, domain: process.env.OPENSHIFT_APP_DNS||"localhost:6001"}, function (err, results) {
       if (err) {
         console.log(err);
         return next(err);
@@ -30,8 +30,8 @@ module.exports.sendAskEmail = function(referral, photogs, callback) {
       sendMail(photog.email, {subject: "Incoming Referral from The Dot", body: results.html}, function(err, info) {
         next();
       });
-      // result.html 
-      // result.text 
+      // result.html
+      // result.text
     })
   }, function (err) {
     callback();

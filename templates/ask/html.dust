@@ -29,7 +29,12 @@
 								</tr>
 								<tr>
 									<td class="content-block">
-										<b>{referral.client.fname} {referral.client.lname}</b> is looking for a wedding photographer on <b>{referral.wedding.date}</b> in <b>{referral.wedding.city}</b> at <b>{referral.wedding.venue}</b></p>
+										You have received a referral from {referrer.fname} {referrer.lname}!
+									</td>
+								</tr>
+								<tr>
+									<td class="content-block">
+										<b>{referral.client.fname} {referral.client.lname}</b> is looking for a wedding photographer on <b>{referral.wedding.date}</b> in <b>{referral.wedding.city}</b> at <b>{referral.wedding.venue}</b>
 									</td>
 								</tr>
 								<tr>

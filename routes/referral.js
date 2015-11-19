@@ -84,11 +84,15 @@ exports.post = function(req, res) {
       }
 
       // remove the contributing photographer from the email list
-      photogs = photogs.filter(function(photog) {
-        return photog._id != req.body.referrer;
-      });
-
-      mailer.sendAskEmail(referral, photogs, function() {
+      var referrer, recipients = [];
+      for (var i in photogs) {
+        if (photogs[i]._id == req.body.referrer) {
+          referrer = photogs[i];
+        } else {
+          recipients.push(photogs[i]);
+        }
+      }
+      mailer.sendAskEmail(referral, referrer, recipients, function() {
         res.render("submitted");
       });
     });
