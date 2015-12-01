@@ -33,11 +33,11 @@ app.set('views', path.join(__dirname, 'views'));
 // leave /availability open so you don't have to auth to respond
 app.get("/availability", routes.availability.get);
 
-// setup auth
-app.use(auth.connect(basic));
-
 // set up app routes
 app.use('/static', express.static(path.join(__dirname, 'public')));
+
+// setup auth
+app.use(auth.connect(basic));
 
 app.get("/photographers", routes.photographers.get);
 app.put("/photographers", routes.photographers.put);
