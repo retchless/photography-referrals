@@ -34,8 +34,15 @@ module.exports.sendAskEmail = function(referral, referrer, photogs, callback) {
       // result.text
     })
   }, function (err) {
-    callback();
+    if (err) {
+      console.log("Error ask email sending email for referral " + referral._id);
+      console.log(err);
+    }
+    console.log("Emails sent for referral " + referral._id);
   });
+
+  //callback early - let mail send async
+  callback();
 }
 
 module.exports.sendResultsEmail = function(referral, photographers, referringPhotog, callback) {
