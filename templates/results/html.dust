@@ -29,7 +29,9 @@
 								</tr>
 								<tr>
 									<td class="content-block">
-										Thank you so much for allowing The.Dot to find you the best photographer available for your wedding day.  The following photographers are available!
+										A little bird ({referringPhotog.fname} {referringPhotog.lname}) told us that you are in the market for a wicked wedding photographer for your big day. We have gone ahead and reached out to all of our members.<br><br>
+
+										The following talented folks are available on your wedding date:
 									</td>
 								</tr>
 								{#availPhotogs}
@@ -39,6 +41,23 @@
 									</td>
 								</tr>
 								{/availPhotogs}
+								<tr>
+									<td class="content-block">
+										We hope this helps narrowing down your options, and saves you some valuable time looking for a wedding photographer. You can contact each one of these wonderful professionals directly by clicking their name! Check out our blog at <a href="http://www.thedot.photo/blog">http://www.thedot.photo/blog</a> for useful information and tips for your wedding day!</a>
+									</td>
+								</tr>
+								<tr>
+									<td class="content-block">
+										Thanks again for chosing The.Dot!
+									</td>
+								</tr>
+								<tr>
+									<td class="content-block">
+										Best regards,<br>
+										The.Dot team<br>
+										<a href="http://www.thedot.photo">www.thedot.photo</a>
+									</td>
+								</tr>
 							</table>
 						</td>
 					</tr>

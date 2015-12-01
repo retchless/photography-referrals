@@ -46,11 +46,7 @@ app.get("/referral", routes.referral.get);
 app.post("/referral", routes.referral.post);
 
 app.get("/", function(req, res) {
-  res.status(302);
-  res.set({
-    location: "/referral"
-  });
-  res.end();
+  res.redirect('/referral');
 });
 var server_port = process.env.OPENSHIFT_NODEJS_PORT || 6001;
 var server_ip_address = process.env.OPENSHIFT_NODEJS_IP || "127.0.0.1";
@@ -81,22 +77,28 @@ var job = new CronJob('*/5 * * * * *',
             for (var i = 0; i < referrals.length; i++) {
               var referral = referrals[i];
               var referralId = referral._id;
-              
-              console.log("Send results email to referral: " + referralId);
-              console.log(referral);
 
-              mailer.sendResultsEmail(referral, photographers, function(err) {
+              db.getPhotographerById(referral.referrer, function(err, referringPhotog) {
                 if (err) {
-                  console.log("Error sending email to referral: " + referralId);
-                  console.log(err);
-                } else {
-                  console.log("Results email sent.");
-      
-                  console.log("Marking as completed in db.");
-                  db.markCompleted(referral, function() {
-                    console.log("Referral " + referralId + " marked completed.");
-                  });
+                  console.log("Error getting referring photographer. Could not complete referral " + referralId);
+                  return err;
                 }
+                console.log("Send results email to referral: " + referralId);
+                console.log(referral);
+
+                mailer.sendResultsEmail(referral, photographers, referringPhotog, function(err) {
+                  if (err) {
+                    console.log("Error sending email to referral: " + referralId);
+                    console.log(err);
+                  } else {
+                    console.log("Results email sent.");
+        
+                    console.log("Marking as completed in db.");
+                    db.markCompleted(referral, function() {
+                      console.log("Referral " + referralId + " marked completed.");
+                    });
+                  }
+                });
               });
             }
           });

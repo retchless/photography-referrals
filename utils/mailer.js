@@ -38,7 +38,7 @@ module.exports.sendAskEmail = function(referral, referrer, photogs, callback) {
   });
 }
 
-module.exports.sendResultsEmail = function(referral, photographers, callback) {
+module.exports.sendResultsEmail = function(referral, photographers, referringPhotog, callback) {
 
   var availPhotogs = referral.availability;
   var subject = "";
@@ -68,7 +68,7 @@ module.exports.sendResultsEmail = function(referral, photographers, callback) {
 
   var templateDir = path.join(__dirname, "../", 'templates', availPhotogs ? 'results' : 'results_none');
   var resultsEmail = new EmailTemplate(templateDir);
-  resultsEmail.render({availPhotogs: availPhotogs, referral: referral, domain: process.env.OPENSHIFT_APP_DNS||"localhost:6001"}, function (err, results) {
+  resultsEmail.render({availPhotogs: availPhotogs, referral: referral, referringPhotog: referringPhotog, domain: process.env.OPENSHIFT_APP_DNS||"localhost:6001"}, function (err, results) {
     if (err) {
       console.log("Error rendering template.");
       console.log(err);
