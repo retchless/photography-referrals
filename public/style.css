@@ -35,7 +35,7 @@ table {
 	display: inline-block;
 	height: 121px;
 	width: 120px;
-	background: url('http://www.thedot.photo/wp-content/uploads/pp/images/logo_1423270870.png') no-repeat;
+	background: url('/thedotlogo.png') no-repeat;
 	margin: 20px 20px 20px 0;
 	vertical-align: middle;
 }
