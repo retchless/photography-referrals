@@ -51,14 +51,15 @@ module.exports.sendResultsEmail = function(referral, photographers, callback) {
           console.log("MATCH " + photographers[j]._id);
           var photog = photographers[j];
           availPhotogs[i] = photog;
-          availPhotogs[i].profileUrl = "http://www.thedot.photo/" + photog.fname.toLowerCase().replace(" ", "-") + "-"+ photog.lname.toLowerCase().replace(" ", "-");
+          availPhotogs[i].profileUrl = "http://www.thedot.photo/" + photog.fname.toLowerCase().replace(/ /g, "-") + "-"+ photog.lname.toLowerCase().replace((/ /g), "-");
           break inner;
         }
       }
     }
 
-    console.log("translated availPhotogs:")
+    console.log("Available photographers:")
     console.log(availPhotogs);
+    
     subject = "The.Dot: Available photographers on your wedding date!";
   } else {
     console.log("No photographers available for referral " + referral._id);
