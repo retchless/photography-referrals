@@ -58,7 +58,9 @@ module.exports.sendResultsEmail = function(referral, photographers, referringPho
           console.log("MATCH " + photographers[j]._id);
           var photog = photographers[j];
           availPhotogs[i] = photog;
-          availPhotogs[i].profileUrl = "http://www.thedot.photo/" + photog.fname.toLowerCase().replace(/ /g, "-") + "-"+ photog.lname.toLowerCase().replace((/ /g), "-");
+          if (!availPhotogs[i].profileUrl) {
+            availPhotogs[i].profileUrl = "http://www.thedot.photo/" + photog.fname.toLowerCase().replace(/ /g, "-") + "-"+ photog.lname.toLowerCase().replace((/ /g), "-");            
+          }
           break inner;
         }
       }
