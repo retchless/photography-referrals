@@ -4,17 +4,24 @@ var
   dust = require('dustjs-linkedin'),
   db = require("../utils/db"),
   EmailTemplate = require('email-templates').EmailTemplate,
-  path = require('path')
+  path = require('path'),
+  smtpPool = require('nodemailer-smtp-pool')
 ;
 
 // create reusable transporter object using SMTP transport
-var transporter = nodemailer.createTransport({
+var transporter = nodemailer.createTransport(smtpPool({
     service: 'Gmail',
     auth: {
         user: 'thedotreferral@gmail.com',
         pass: 'retchless'
-    }
-});
+    },
+    // use up to 5 parallel connections
+    maxConnections: 3,
+    // do not send more than 50 messages per connection
+    maxMessages: 50,
+    // no not send more than 5 messages in a second
+    rateLimit: 5
+}));
 
 module.exports.sendAskEmail = function(referral, referrer, photogs, callback) {
   var templateDir = path.join(__dirname, "../", 'templates', 'ask')
