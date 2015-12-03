@@ -68,7 +68,6 @@ module.exports.sendResultsEmail = function(referral, photographers, referringPho
     outer: for (var i = 0; i < availPhotogs.length; i++) {
       inner: for (var j = 0; j < photographers.length; j++) {
         if (photographers[j]._id.toString() == availPhotogs[i].photographerId.toString()) {
-          console.log("MATCH " + photographers[j]._id);
           var photog = photographers[j];
           availPhotogs[i] = photog;
           if (!availPhotogs[i].profileUrl) {
@@ -132,12 +131,18 @@ var sendMail = function(to, cc, content, callback) {
 
   // send mail with defined transport object
   transporter.sendMail(mailOptions, function(error, info){
-      if(error){
+      if (error){
         console.log("Error sending email to: " + to);
         console.log(error);
         return callback(error);
       }
-      console.log('Message sent to '+ to + ": " + info.response);
+
+      if (cc) {
+        console.log('Message sent to ' + to + " and (by CC) to " + cc + ": " + info.response);
+      } else {
+        console.log('Message sent to ' + to + ": " + info.response);
+      }
+
       callback(null, info);
   });
 };

@@ -28,6 +28,11 @@ table td {
   vertical-align: top;
 }
 
+table td.middle {
+  vertical-align: middle;
+  line-height: 1.2;
+}
+
 .avail-photogs {
   font-size: 14pt;
 }

@@ -19,7 +19,7 @@
 							<table width="100%" cellpadding="0" cellspacing="0">
 								<tr>
 									<td class="content-block">
-										<div class="thedotlogo"></div><span class="headertext">Photography Referral Finder</span>
+										<table><tr><td class="middle"><div class="thedotlogo"></div></td><td class="middle"><span class="headertext">The.Dot's Available Photographers</span></td></tr></table>
 									</td>
 								</tr>
 								<tr>
