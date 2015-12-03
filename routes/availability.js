@@ -14,10 +14,11 @@ exports.get = function(req, res) {
 
   db.recordAvailability(answer, function(err, results) {
     if (err) {
-      res.end(err.toString());
+      res.render("error", { errTxt: err.toString() });
+      return;
     }
     if (!results || !results.photographer) {
-      res.end("Invalid parameters - availability not recorded.");
+      res.render("error", { errTxt: "There was a problem with your request. Either your photographer ID or the referral ID is incorrect (bad link?).  Your availability has not been recorded." });
       return;
     }
     console.log("Photographer " + results.photographer.fname + " " + results.photographer.lname + " availability marked as " + results.availability + " for event id " + results.referral._id)

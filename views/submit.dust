@@ -6,6 +6,7 @@
     <div class="form-group">
       <label for="referring-photographer">Referring photographer</label>
       <select class="form-control" name="referrer" id="referring-photographer">
+        <option value="" selected disabled>Please select your name</option>
         {#photographers}
           <option value="{_id}">{fname} {lname}</option>
         {/photographers}

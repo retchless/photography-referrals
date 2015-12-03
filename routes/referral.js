@@ -8,6 +8,19 @@ exports.get = function(req, res) {
       res.end(err.toString());
       return;
     }
+
+    photogs.sort(function(a,b) {
+        if (a.fname && b.fname) {
+          if (a.fname.toLowerCase() < b.fname.toLowerCase()) return -1;
+          if (a.fname.toLowerCase() > b.fname.toLowerCase()) return 1;
+        }
+        if (a.lname && b.lname) {
+          if (a.lname.toLowerCase() < b.lname.toLowerCase()) return -1;
+          if (a.lname.toLowerCase() > b.lname.toLowerCase()) return 1;          
+        }
+        return 0;
+    });
+
     res.render("submit", {
       photographers: photogs
     })

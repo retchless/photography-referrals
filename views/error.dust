@@ -7,8 +7,8 @@
 
 	<h1><div class="thedotlogo"></div>Photographer Referral Finder</h1>
 
-	Your request has been submitted.  All of the photographers on The Dot have been notified about this referral, and the client will be automatically notified after 24 hours.
-
+	{errTxt}
 </div>
+
 </body>
 </html>

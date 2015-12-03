@@ -8,6 +8,12 @@ var
   smtpPool = require('nodemailer-smtp-pool')
 ;
 
+var adminEmail = 'retchless@gmail.com';
+if (process.env.OPENSHIFT_NODEJS_PORT) {
+  // if we are in production, use info@thedot.photo
+  adminEmail = 'info@thedot.photo';
+}
+
 // create reusable transporter object using SMTP transport
 var transporter = nodemailer.createTransport(smtpPool({
     service: 'Gmail',
@@ -34,7 +40,7 @@ module.exports.sendAskEmail = function(referral, referrer, photogs, callback) {
         console.log(err);
         return next(err);
       }
-      sendMail(photog.email, {subject: "Incoming Referral from The Dot", body: results.html}, function(err, info) {
+      sendMail(photog.email, null, {subject: "Incoming Referral from The Dot", body: results.html}, function(err, info) {
         next();
       });
       // result.html
@@ -90,7 +96,7 @@ module.exports.sendResultsEmail = function(referral, photographers, referringPho
       console.log(err);
     }
 
-    sendMail(referral.client.email, {subject: subject, body: results.html}, function(err, info) {
+    sendMail(referral.client.email, adminEmail, {subject: subject, body: results.html}, function(err, info) {
       if (err) {
         console.log("Error sending mail.");
         console.log(err);
@@ -110,14 +116,19 @@ module.exports.sendResultsEmail = function(referral, photographers, referringPho
  * content.subject: the subject of the email to be sent
  * content.body: the body of the email to be sent
  */
-var sendMail = function(to, content, callback) {
+var sendMail = function(to, cc, content, callback) {
   // setup e-mail data with unicode symbols
   var mailOptions = {
-      from: 'The Dot Referral Service <thedotreferral@gmail.com>', // sender address
+      from: 'The Dot Referral Service <info@thedot.photo>', // sender address
       to: to,
+      replyTo: adminEmail,
       subject: content.subject, // Subject line
       html: content.body // html body
   };
+
+  if (cc) {
+    mailOptions.cc = cc;
+  }
 
   // send mail with defined transport object
   transporter.sendMail(mailOptions, function(error, info){

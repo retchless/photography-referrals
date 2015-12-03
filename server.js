@@ -74,17 +74,17 @@ var job = new CronJob(cron,
         console.log(err);
       } else {
         if (referrals.length > 0) {
-          console.log("Completed referrals: " + referrals);
+          console.log("Completed referrals: ");
+          console.log(referrals);
           db.getPhotographers(function(err, photographers)  {
             if (err) {
               console.log("Error getting list of Photographers from DB");
               console.log(err);
               return err;
             }
-            for (var i = 0; i < referrals.length; i++) {
-              var referral = referrals[i];
-              var referralId = referral._id;
 
+            referrals.forEach(function(referral) {
+              var referralId = referral._id;
               db.getPhotographerById(referral.referrer, function(err, referringPhotog) {
                 if (err) {
                   console.log("Error getting referring photographer. Could not complete referral " + referralId);
@@ -107,7 +107,7 @@ var job = new CronJob(cron,
                   }
                 });
               });
-            }
+            });
           });
         } else {
           console.log("No referrals marked for completion");

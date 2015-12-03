@@ -5,7 +5,7 @@
 <body>
 <div class="availability">
 
-	<h1><div class="thedotlogo"></div>Photgrapher Referral Finder</h1>
+	<h1><div class="thedotlogo"></div>Photographer Referral Finder</h1>
 
 	{photographer.fname} {photographer.lname}, <br><br>
 	Your availability has been recorded!<br><br>

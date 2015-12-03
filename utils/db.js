@@ -74,9 +74,13 @@ module.exports.recordAvailability = function(answer, callback) {
 
   async.parallel(asyncTasks, function(err, results) {
     if (err) {
-        callback(err);
+      return callback(err);
     }
 
+    if (!results || !results.referral || results.referral.completed) {
+      return callback("Sorry! This referral request has already been completed. Please click the button faster next time (within 24 hours of receiving the request)!");
+    }
+    
     results.availability = !!JSON.parse(answer.available);
 
     // first try just updating the existing response for this photographer
