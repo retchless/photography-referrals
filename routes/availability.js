@@ -7,6 +7,8 @@ exports.get = function(req, res) {
     photographerId: req.query["photographerId"]
   }
 
+  console.log("Photographer availability endpoint accessed via url: " + req.url);
+  
   if (typeof answer.referralId == "undefined" || typeof answer.available == "undefined" || typeof answer.photographerId == "undefined") {
     res.end("Invalid parameters - availability not recorded.");
     return;

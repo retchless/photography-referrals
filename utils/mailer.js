@@ -63,23 +63,25 @@ module.exports.sendResultsEmail = function(referral, photographers, referringPho
   var availPhotogs = referral.availability;
   var subject = "";
 
+  var listToSend = [];
+
   if (availPhotogs) {
     console.log(availPhotogs.length + " available photographers for referral " + referral._id + ":");
     outer: for (var i = 0; i < availPhotogs.length; i++) {
       inner: for (var j = 0; j < photographers.length; j++) {
         if (photographers[j]._id.toString() == availPhotogs[i].photographerId.toString()) {
           var photog = photographers[j];
-          availPhotogs[i] = photog;
-          if (!availPhotogs[i].profileUrl) {
-            availPhotogs[i].profileUrl = "http://www.thedot.photo/" + photog.fname.toLowerCase().replace(/ /g, "-") + "-"+ photog.lname.toLowerCase().replace((/ /g), "-");            
+          if (!photog.profileUrl) {
+            photog.profileUrl = "http://www.thedot.photo/" + photog.fname.toLowerCase().replace(/ /g, "-") + "-"+ photog.lname.toLowerCase().replace((/ /g), "-");            
           }
+          listToSend.push(photog);
           break inner;
         }
       }
     }
 
     console.log("Available photographers:")
-    console.log(availPhotogs);
+    console.log(listToSend);
     
     subject = "The.Dot: Available photographers on your wedding date!";
   } else {
@@ -87,9 +89,9 @@ module.exports.sendResultsEmail = function(referral, photographers, referringPho
     subject = "The.Dot: No photographers found for your wedding date";
   }
 
-  var templateDir = path.join(__dirname, "../", 'templates', availPhotogs ? 'results' : 'results_none');
+  var templateDir = path.join(__dirname, "../", 'templates', listToSend.length ? 'results' : 'results_none');
   var resultsEmail = new EmailTemplate(templateDir);
-  resultsEmail.render({availPhotogs: availPhotogs, referral: referral, referringPhotog: referringPhotog, domain: process.env.OPENSHIFT_APP_DNS||"localhost:6001"}, function (err, results) {
+  resultsEmail.render({availPhotogs: listToSend, referral: referral, referringPhotog: referringPhotog, domain: process.env.OPENSHIFT_APP_DNS||"localhost:6001"}, function (err, results) {
     if (err) {
       console.log("Error rendering template.");
       console.log(err);

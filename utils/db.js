@@ -56,7 +56,7 @@ module.exports.recordAvailability = function(answer, callback) {
           callback("error: Invalid Photographer ID");
           return;
         }
-        console.log("valid photographer: " + photog._id);
+        console.log("Valid photographer: " + photog._id);
         callback(null, photog);
       });
     },
@@ -66,7 +66,7 @@ module.exports.recordAvailability = function(answer, callback) {
           callback("error: Invalid Referral ID");
           return;
         }
-        console.log("valid referral: " + ref._id);
+        console.log("Valid referral: " + ref._id);
         callback(null, ref);
       });
     }
@@ -81,8 +81,13 @@ module.exports.recordAvailability = function(answer, callback) {
       return callback("Sorry! This referral request has already been completed. Please click the button faster next time (within 24 hours of receiving the request)!");
     }
     
-    results.availability = !!JSON.parse(answer.available);
-
+    try {
+      //wrap in a try/catch because JSON.parse can throw exceptions if input is not JSON-y
+      results.availability = !!JSON.parse(answer.available);
+    } catch (e) {
+      return callback("Sorry! Your availability was not recorded because of some invalid characters in your URL. Please try again!");
+    }
+    
     // first try just updating the existing response for this photographer
     referrals.update({
       _id: ObjectID(answer.referralId),
