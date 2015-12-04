@@ -66,8 +66,8 @@ module.exports.sendResultsEmail = function(referral, photographers, referringPho
   var listToSend = [];
 
   if (availPhotogs) {
-    console.log(availPhotogs.length + " available photographers for referral " + referral._id + ":");
     outer: for (var i = 0; i < availPhotogs.length; i++) {
+      if (!availPhotogs[i].available) continue;
       inner: for (var j = 0; j < photographers.length; j++) {
         if (photographers[j]._id.toString() == availPhotogs[i].photographerId.toString()) {
           var photog = photographers[j];
@@ -79,10 +79,11 @@ module.exports.sendResultsEmail = function(referral, photographers, referringPho
         }
       }
     }
+  }
 
-    console.log("Available photographers:")
+  if (listToSend.length) {
+    console.log(availPhotogs.length + " available photographers for referral " + referral._id + ":");
     console.log(listToSend);
-    
     subject = "The.Dot: Available photographers on your wedding date!";
   } else {
     console.log("No photographers available for referral " + referral._id);
