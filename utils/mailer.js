@@ -82,7 +82,7 @@ module.exports.sendResultsEmail = function(referral, photographers, referringPho
   }
 
   if (listToSend.length) {
-    console.log(availPhotogs.length + " available photographers for referral " + referral._id + ":");
+    console.log(listToSend.length + " available photographers for referral " + referral._id + ":");
     console.log(listToSend);
     subject = "The.Dot: Available photographers on your wedding date!";
   } else {
