@@ -78,6 +78,11 @@ module.exports.recordAvailability = function(answer, callback) {
     }
 
     if (!results || !results.referral || results.referral.completed) {
+      if (results && results.photographer) {
+        console.log("Referral already completed. " + results.photographer.fname + " " + results.photographer.lname + " not marked as available for this referral.");       
+      } else {
+        console.log("Referral already completed or referral could not be found.");
+      }
       return callback("Sorry! This referral request has already been completed. Please click the button faster next time (within 24 hours of receiving the request)!");
     }
     
@@ -85,6 +90,7 @@ module.exports.recordAvailability = function(answer, callback) {
       //wrap in a try/catch because JSON.parse can throw exceptions if input is not JSON-y
       results.availability = !!JSON.parse(answer.available);
     } catch (e) {
+      console.log("Error parsing URL - invalid characters");
       return callback("Sorry! Your availability was not recorded because of some invalid characters in your URL. Please try again!");
     }
     

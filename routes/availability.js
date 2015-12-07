@@ -17,10 +17,12 @@ exports.get = function(req, res) {
   db.recordAvailability(answer, function(err, results) {
     if (err) {
       res.render("error", { errTxt: err.toString() });
+      console.log(err.toString());
       return;
     }
     if (!results || !results.photographer) {
       res.render("error", { errTxt: "There was a problem with your request. Either your photographer ID or the referral ID is incorrect (bad link?).  Your availability has not been recorded." });
+      console.log("!results || !results.photographer... this shouldn't happen.");
       return;
     }
     console.log("Photographer " + results.photographer.fname + " " + results.photographer.lname + " availability marked as " + results.availability + " for event id " + results.referral._id)
