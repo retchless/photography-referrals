@@ -1,11 +1,11 @@
 var
   nodemailer = require('nodemailer'),
+  sgTransport = require('nodemailer-sendgrid-transport'),
   async = require("async"),
   dust = require('dustjs-linkedin'),
   db = require("../utils/db"),
   EmailTemplate = require('email-templates').EmailTemplate,
-  path = require('path'),
-  smtpPool = require('nodemailer-smtp-pool')
+  path = require('path');
 ;
 
 var adminEmail = 'retchless@gmail.com';
@@ -15,18 +15,10 @@ if (process.env.OPENSHIFT_NODEJS_PORT) {
 }
 
 // create reusable transporter object using SMTP transport
-var transporter = nodemailer.createTransport(smtpPool({
-    service: 'Gmail',
+var transporter = nodemailer.createTransport(sgTransport({
     auth: {
-        user: 'thedotreferral@gmail.com',
-        pass: 'retchless'
-    },
-    // use up to 5 parallel connections
-    maxConnections: 3,
-    // do not send more than 50 messages per connection
-    maxMessages: 50,
-    // no not send more than 5 messages in a second
-    rateLimit: 5
+        api_key: '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'
+    }
 }));
 
 module.exports.sendAskEmail = function(referral, referrer, photogs, callback) {
